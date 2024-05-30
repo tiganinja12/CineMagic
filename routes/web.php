@@ -25,6 +25,8 @@ Route::get('/', [HomeController::class, 'index']);
 // Movie routes
 Route::get('/movies', [MovieController::class, 'index']);
 Route::get('/movies/{id}', [MovieController::class, 'show']);
+Route::resource('movies', MovieController::class);
+
 
 // Purchase routes
 Route::post('/purchases', [PurchaseController::class, 'store'])->middleware('auth:sanctum');
