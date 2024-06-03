@@ -9,8 +9,8 @@ Route::get('/', function () {
 // routes/web.php
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MovieController;
-use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ScreeningController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\HomeController;
 
 
@@ -38,10 +38,10 @@ Route::get('/movies', [MovieController::class, 'index']);
 Route::get('/movies/{id}', [MovieController::class, 'show']);
 Route::resource('movies', MovieController::class);
 
-
 // Purchase routes
 Route::post('/purchases', [PurchaseController::class, 'store'])->middleware('auth:sanctum');
 
 // Screening routes
 Route::get('/screenings', [ScreeningController::class, 'index']);
 Route::get('/screenings/{id}', [ScreeningController::class, 'show']);
+Route::resource('screenings', ScreeningController::class);
