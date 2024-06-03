@@ -14,11 +14,13 @@ use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\HomeController;
 
 
-// Authentication routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+use App\Http\Controllers\Auth\LoginController;
 
+
+// Auth routes
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // Home route
