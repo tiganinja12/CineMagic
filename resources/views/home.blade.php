@@ -1,3 +1,7 @@
+@extends('layouts.main')
+
+@section('header-title', 'Introduction')
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
