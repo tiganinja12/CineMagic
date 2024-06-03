@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-<<<<<<< Updated upstream
-=======
 
 // routes/web.php
 use App\Http\Controllers\AuthController;
@@ -15,13 +13,12 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\HomeController;
 
-use App\Http\Controllers\Auth\LoginController;
 
+// Authentication routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-// Auth Routes
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 
 // Home route
@@ -39,4 +36,3 @@ Route::post('/purchases', [PurchaseController::class, 'store'])->middleware('aut
 // Screening routes
 Route::get('/screenings', [ScreeningController::class, 'index']);
 Route::get('/screenings/{id}', [ScreeningController::class, 'show']);
->>>>>>> Stashed changes
