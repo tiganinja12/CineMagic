@@ -8,10 +8,25 @@ use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $movies = Movie::paginate(10);
-        return view('movies.index', compact('movies'));
+        $filterByGenre = $request->input('genre');
+        $filterByTitle = $request->input('title');
+
+        $query = Movie::query();
+
+        if ($filterByGenre) {
+            $query->where('genre_code', $filterByGenre);
+        }
+
+        if ($filterByTitle) {
+            $query->where('title', 'like', '%' . $filterByTitle . '%');
+        }
+
+        $movies = $query->paginate(10);
+        $genres = Genre::all();
+
+        return view('movies.index', compact('movies', 'genres', 'filterByGenre', 'filterByTitle'));
     }
 
     public function create()
