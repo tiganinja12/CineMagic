@@ -16,27 +16,32 @@ class MovieController extends Controller
 
     public function create()
     {
+        $movie = new Movie();
         $genres = Genre::all();
-        return view('movies.create', compact('genres'));
+        return view('movies.create', compact('movie', 'genres'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'genre_code' => 'required|string',
-            'year' => 'required|integer',
             'synopsis' => 'required|string',
-            'poster' => 'image|nullable',
+            'year' => 'required|integer',
+            'genre_code' => 'required|string|exists:genres,code',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $movie = new Movie($request->all());
-        if ($request->hasFile('poster')) {
-            $movie->poster_filename = $request->file('poster')->store('posters', 'public');
-        }
-        $movie->save();
+        $posterPath = $request->file('poster') ? $request->file('poster')->store('posters') : null;
 
-        return redirect()->route('movies.index')->with('success', 'Movie created successfully');
+        Movie::create([
+            'title' => $request->title,
+            'synopsis' => $request->synopsis,
+            'year' => $request->year,
+            'genre_code' => $request->genre_code,
+            'poster_filename' => $posterPath,
+        ]);
+
+        return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
     }
 
     public function show(Movie $movie)

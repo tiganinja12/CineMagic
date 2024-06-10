@@ -10,7 +10,7 @@
                     <form method="POST" action="{{ route('movies.update', $movie) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
-                        @include('movies.shared.fields')
+                        @include('movies.shared.fields', ['movie' => $movie, 'genres' => $genres])
                         <div class="mt-3">
                             <input type="submit" class="btn btn-success" value="Update">
                         </div>

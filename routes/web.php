@@ -34,8 +34,6 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::get('/', [HomeController::class, 'index']);
 
 // Movie routes
-Route::get('/movies', [MovieController::class, 'index']);
-Route::get('/movies/{id}', [MovieController::class, 'show']);
 Route::resource('movies', MovieController::class);
 
 // Purchase routes

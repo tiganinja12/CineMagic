@@ -37,3 +37,6 @@
     <div class="small text-danger"> {{$message}} </div>
     @enderror
 </div>
+@if(isset($movie->poster_filename))
+    @include('movies.shared.image')
+@endif
