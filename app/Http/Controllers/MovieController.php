@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class MovieController extends Controller
 {
@@ -13,7 +14,12 @@ class MovieController extends Controller
         $filterByGenre = $request->input('genre');
         $filterByTitle = $request->input('title');
 
-        $query = Movie::query();
+        $startDate = Carbon::today();
+        $endDate = Carbon::today()->addWeeks(2);
+
+        $query = Movie::whereHas('screenings', function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('date', [$startDate, $endDate]);
+        });
 
         if ($filterByGenre) {
             $query->where('genre_code', $filterByGenre);

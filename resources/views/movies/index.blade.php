@@ -79,7 +79,7 @@
                             </div>
                             <img src="{{ $movie->poster_filename ? asset('storage/posters/' . $movie->poster_filename) : asset('storage/posters/default.png') }}" class="card-img-top p-3" alt="{{ $movie->title }}">
                             <div class="card-body">
-                                {{ $movie->synopsis }}
+                                <p>{{ $movie->synopsis }}</p>
                             </div>
                             <div class="card-footer">
                                 <a class="btn btn-primary" href="{{ route('movies.show', $movie) }}">View Details</a>

@@ -14,6 +14,9 @@
                     <p><strong>Genre:</strong> {{ $movie->genre->name ?? 'No Genre' }}</p>
                     <p><strong>Year:</strong> {{ $movie->year }}</p>
                     <p><strong>Synopsis:</strong> {{ $movie->synopsis }}</p>
+                    @if($movie->trailer_url)
+                        <a href="{{ $movie->trailer_url }}" class="btn btn-primary" target="_blank">Watch Trailer</a>
+                    @endif
                 </div>
             </div>
         </div>
