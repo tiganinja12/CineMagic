@@ -29,6 +29,9 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
+    //Profile
+Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile');
+
 
 // Home route
 Route::get('/', [HomeController::class, 'index']);

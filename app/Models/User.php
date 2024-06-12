@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'photo_filename',
     ];
 
     /**
@@ -43,5 +44,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getProfilePictureUrlAttribute()
+    {
+        return $this->photo_filename ? asset('storage/profile_pictures/' . $this->photo_filename) : asset('storage/profile_pictures/default.png');
     }
 }
