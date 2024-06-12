@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Ticket extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'screening_id', 'seat_id', 'purchase_id', 'price', 'qrcode_url', 'status'
@@ -16,7 +15,7 @@ class Ticket extends Model
 
     public function screening()
     {
-        return $this->belongsTo(Screening::class);
+        return $this->belongsTo(Screening::class, 'screening_id', 'id');
     }
 
     public function seat()

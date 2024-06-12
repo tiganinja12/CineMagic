@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to CineMagic</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
+@section('content')
 <body>
     <div class="container">
         <h1>Welcome to CineMagic</h1>
@@ -18,8 +18,8 @@
                 <li><a href="{{ url('/register') }}">Register</a></li>
             @else
                 <li>
-                    <a href="{{ route('logout') }}" 
-                       onclick="event.preventDefault(); 
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
                         Logout
                     </a>
@@ -29,3 +29,5 @@
                 </li>
             @endguest
         </ul>
+</body>
+@endsection
