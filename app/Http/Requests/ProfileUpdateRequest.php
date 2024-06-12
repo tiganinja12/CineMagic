@@ -14,10 +14,9 @@ class ProfileUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $this->user()->id,
-            'nif' => 'nullable|string|max:255',
-            'payment_ref' => 'nullable|string|max:255',
+            'nif' => 'sometimes|min:9|max:9',
+            'payment_type' => 'sometimes',
+            'payment_ref' => 'sometimes',
             'photo_filename' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
