@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c133b312fe180afc0f2b635022ad80ac",
+    "content-hash": "6aa8b1c41f6b2e9e802450e586153003",
     "packages": [
         {
             "name": "brick/math",
@@ -1502,6 +1502,69 @@
                 "source": "https://github.com/laravel/tinker/tree/v2.9.0"
             },
             "time": "2024-01-04T16:10:04+00:00"
+        },
+        {
+            "name": "laravel/ui",
+            "version": "v4.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/ui.git",
+                "reference": "c75396f63268c95b053c8e4814eb70e0875e9628"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/ui/zipball/c75396f63268c95b053c8e4814eb70e0875e9628",
+                "reference": "c75396f63268c95b053c8e4814eb70e0875e9628",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^9.21|^10.0|^11.0",
+                "illuminate/filesystem": "^9.21|^10.0|^11.0",
+                "illuminate/support": "^9.21|^10.0|^11.0",
+                "illuminate/validation": "^9.21|^10.0|^11.0",
+                "php": "^8.0",
+                "symfony/console": "^6.0|^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^7.35|^8.15|^9.0",
+                "phpunit/phpunit": "^9.3|^10.4|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Laravel\\Ui\\UiServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laravel\\Ui\\": "src/",
+                    "Illuminate\\Foundation\\Auth\\": "auth-backend/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "Laravel UI utilities and presets.",
+            "keywords": [
+                "laravel",
+                "ui"
+            ],
+            "support": {
+                "source": "https://github.com/laravel/ui/tree/v4.5.2"
+            },
+            "time": "2024-05-08T18:07:10+00:00"
         },
         {
             "name": "league/commonmark",
@@ -6739,16 +6802,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "11.2.0",
+            "version": "11.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "705eba0190afe04bc057f565ad843267717cf109"
+                "reference": "1b8775732e9c401bda32df3ffbdf90dec7533ceb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/705eba0190afe04bc057f565ad843267717cf109",
-                "reference": "705eba0190afe04bc057f565ad843267717cf109",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1b8775732e9c401bda32df3ffbdf90dec7533ceb",
+                "reference": "1b8775732e9c401bda32df3ffbdf90dec7533ceb",
                 "shasum": ""
             },
             "require": {
@@ -6819,7 +6882,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.2.0"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/11.2.1"
             },
             "funding": [
                 {
@@ -6835,7 +6898,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-07T04:48:50+00:00"
+            "time": "2024-06-11T07:30:35+00:00"
         },
         {
             "name": "sebastian/cli-parser",

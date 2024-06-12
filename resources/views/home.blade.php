@@ -29,6 +29,3 @@
                 </li>
             @endguest
         </ul>
-    </div>
-</body>
-</html>
