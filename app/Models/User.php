@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function getProfilePictureUrlAttribute()
     {
-        return $this->photo_filename ? asset('storage/profile_pictures/' . $this->photo_filename) : asset('storage/profile_pictures/default.png');
+        return $this->photo_filename ? asset('storage/photos' . $this->photo_filename) : asset('storage/photos/default.png');
     }
 }
