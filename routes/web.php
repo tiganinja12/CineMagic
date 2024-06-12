@@ -43,6 +43,7 @@ Route::get('/', [HomeController::class, 'index']);
 
 // Movie routes
 Route::resource('movies', MovieController::class);
+Route::get('movies/{movie}/{screening}', [MovieController::class, 'show_session'])->name('movies.show_session');
 
 // Purchase routes
 Route::post('/purchases', [PurchaseController::class, 'store'])->middleware('auth');
