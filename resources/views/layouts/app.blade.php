@@ -51,12 +51,16 @@
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                <img src="{{ asset('storage/photos/' . Auth::user()->photo_filename) }}" alt="Profile Picture" class="rounded-circle" width="30" height="30" style="margin-right: 8px;">
+                                    @if (Auth::user()->photo_filename)
+                                        <img src="{{ asset('storage/photos/' . Auth::user()->photo_filename) }}" alt="Profile Picture" class="rounded-circle" width="30" height="30" style="margin-right: 8px;">
+                                    @else
+                                        <img src="{{ asset('storage/photos/default.png') }}" alt="Profile Picture" class="rounded-circle" width="30" height="30" style="margin-right: 8px;">
+                                    @endif
                                     {{ Auth::user()->name }}
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('profile') }}">
+                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                         {{ __('Profile') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"

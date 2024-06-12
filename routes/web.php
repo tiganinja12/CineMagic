@@ -35,8 +35,12 @@ Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEm
 Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
-// Profile route
-Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+// Profile routes with middleware to protect access
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});
 
 // Home route
 Route::get('/', [HomeController::class, 'index']);
@@ -49,3 +53,6 @@ Route::post('/purchases', [PurchaseController::class, 'store'])->middleware('aut
 
 // Screening routes
 Route::resource('screenings', ScreeningController::class);
+
+// Remove duplicate home route and ensure correct ordering
+Route::get('/', [HomeController::class, 'index']);
