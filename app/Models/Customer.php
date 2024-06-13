@@ -18,4 +18,9 @@ class Customer extends Model
     {
         return $this->belongsTo(User::class, 'id', 'id');
     }
+
+    public function purchases() {
+        return $this->hasMany(Purchase::class, 'customer_id', 'id');
+    }
 }
+
