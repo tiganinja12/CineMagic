@@ -22,9 +22,8 @@
     <!-- Tailwind CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
 
+
     <!-- Flowbite CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.4.7/dist/flowbite.min.css" />
-    <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
 
 
     <link rel="preload" href="http://[::1]:5173/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
@@ -218,7 +217,6 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a>O USER E O QUE: {{ Auth::user()->type }}</a>
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     <img src="{{ asset('storage/photos/' . Auth::user()->photo_filename) }}"
@@ -249,8 +247,6 @@
                             style="text-decoration: none;">
 
                             <i class="fas fa-shopping-cart"></i>
-                            <span class="sr-only">Carrinho de compras</span>
-                            <span class="text-slate-400">({{ session('cart') ? count(session('cart')) : 0 }})</span>
                         </a>
                     </ul>
                 </div>
