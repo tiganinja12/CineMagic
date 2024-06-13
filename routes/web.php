@@ -89,4 +89,6 @@ Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira
 // Screening routes
 Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
     Route::resource('screenings', ScreeningController::class);
+    Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
+    Route::put('screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
 });
