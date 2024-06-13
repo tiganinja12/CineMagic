@@ -7,6 +7,7 @@ use App\Http\Controllers\ScreeningController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -91,4 +92,9 @@ Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
     Route::resource('screenings', ScreeningController::class);
     Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
     Route::put('screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
+
+    // Theater routes
+Route::resource('theaters', TheaterController::class)->except(['show']);
+Route::patch('theaters/{theater}/restore', [TheaterController::class, 'restore'])->name('theaters.restore');
+Route::delete('theaters/{theater}/softDelete', [TheaterController::class, 'softDelete'])->name('theaters.softDelete');
 });

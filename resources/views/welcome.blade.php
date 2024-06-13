@@ -1,4 +1,3 @@
-<!-- resources/views/welcome.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -10,6 +9,7 @@
         <li><a href="{{ route('screenings.index') }}">View Screenings</a></li>
         @if(Auth::user() && Auth::user()->type === 'A')
             <li><a href="{{ route('admin.index') }}">Manage Users</a></li>
+            <li><a href="{{ route('theaters.index') }}">Manage Theaters</a></li>
         @endif
         <li><a href="{{ route('logout') }}"
                onclick="event.preventDefault();
