@@ -50,9 +50,10 @@ Route::get('/home', [HomeController::class, 'index']);
 Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth')->name('admin.users');
 Route::get('admin/users/create', [AdminController::class, 'create'])->name('admin.create');
 Route::post('admin/users', [AdminController::class, 'store'])->name('admin.store');
-Route::get('admin/users/{user}', [AdminController::class, 'show'])->name('admin.users.show');
-Route::get('/admin/users/{user}/edit', [AdminController::class, 'edit'])->middleware('auth')->name('admin.users.edit');
-Route::put('/admin/users/{user}', [AdminController::class, 'update'])->middleware('auth')->name('admin.users.update');
+Route::get('admin/users/{user}', [AdminController::class, 'show'])->name('admin.show');
+Route::get('/admin/users/{user}/edit', [AdminController::class, 'edit'])->middleware('auth')->name('admin.edit');
+Route::put('/admin/users/{user}', [AdminController::class, 'update'])->middleware('auth')->name('admin.update');
+Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
 
 // Movie routes
 Route::resource('movies', MovieController::class);

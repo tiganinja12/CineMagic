@@ -43,11 +43,15 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->type }}</td>
                 <td>
-                    <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm">Consult</a>
+                    <a href="{{ route('admin.show', $user->id) }}" class="btn btn-info btn-sm">Consult</a>
                     @if($user->type !== 'C')
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ route('admin.edit', $user->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('admin.destroy', $user->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
+                        </form>
                     @endif
-                    <!-- Add delete functionality if needed -->
                 </td>
             </tr>
             @endforeach

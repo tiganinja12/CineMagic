@@ -76,5 +76,17 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users')->with('success', 'User created successfully');
     }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        // Ensure only Admin and Employee can be deleted
+        if (in_array($user->type, ['A', 'E'])) {
+            $user->delete();
+        }
+
+        return redirect()->route('admin.users')->with('success', 'User deleted successfully');
+    }
 }
 
