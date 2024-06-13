@@ -14,6 +14,8 @@ class Theater extends Model
         'name', 'photo_filename'
     ];
 
+    public $timestamps = false;
+
     public function seats()
     {
         return $this->hasMany(Seat::class);
