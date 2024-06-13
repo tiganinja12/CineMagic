@@ -26,8 +26,9 @@
 
                                 <td class="px-6 py-4">
                                     <div class="container mx-auto sm:flex">
-                                        <img class="h-48 w-32"
-                                            src="{{ $row['poster_filename'] ? asset('storage/poster_filenames/' . $row['poster_filename']) : asset('img/default_cartaz.png') }}">
+                                        <img src="{{ $row['poster_filename'] ? asset('storage/posters/' . $row['poster_filename']) : asset('storage/posters/default.png') }}"
+                                            class="card-img-top p-3" style="max-width: 150px; max-height: 200px;"
+                                            alt="{{ $row['movie'] }}">
                                         <div class="md:ml-16 mt-10">
                                             <h2 class="text-2xl text-white font-semibold "> {{ $row['movie'] }}</h2>
 
@@ -78,14 +79,11 @@
 
             </div>
 
-            @if (Auth::user())
-                @if (is_null(Auth::user()->cliente))
-                    @if (Auth::user()->tipo == 'C')
-                        <a href="{{ route('clientes.edit_cliente') }}">
-                            <button type="button"
-                                class="w-64 mt-6 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                                Tem de configurar o cliente</button>
-                        </a>
+            @if (Auth::check())
+                @if (is_null(Auth::user()->customer))
+                <a>O USER E O QUE: {{ is_null(Auth::user()->customer) }}</a>
+                    @if (Auth::user()->type == 'C')
+
                     @endif
                 @else
                     <a href="#" data-toggle="modal" data-target="#payLogal">
@@ -94,7 +92,8 @@
                             Pagar</button>
                     </a>
                 @endif
-            @endif
+            @endauth
+
             @guest
                 <a href="{{ route('login') }}">
                     <button type="button"
@@ -107,25 +106,18 @@
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content bg-slate-800">
-
                         <div class="modal-body text-center">
-
                             <h5 class="text-white" id="payLogal">Pretende proceder ao pagamento?</h5>
-
                             <br>
-
                             <div class="flex items-center justify-center">
                                 <form action="{{ route('bilheteira.create') }}" method="POST">
                                     @csrf
                                     @method('POST')
                                     <button type="submit"
-                                        class=" text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Sim</button>
+                                        class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Sim</button>
                                 </form>
-
-                                <button data-dismiss="modal" type="submit"
+                                <button data-dismiss="modal" type="button"
                                     class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">Nao</button>
-
-
                             </div>
                         </div>
                     </div>
