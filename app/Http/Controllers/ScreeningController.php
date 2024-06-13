@@ -41,8 +41,9 @@ class ScreeningController extends Controller
         return view('screenings.show', compact('screening'));
     }
 
-    public function edit(Screening $screening)
+    public function edit(Request $request, Screening $screening)
     {
+        //dd($request->all());
         $movies = Movie::all();
         $theaters = Theater::all();
         return view('screenings.edit', compact('screening', 'movies', 'theaters'));
@@ -50,13 +51,16 @@ class ScreeningController extends Controller
 
     public function update(Request $request, Screening $screening)
     {
+        if ($screening->tickets()->exists()) {
+            return redirect()->route('screenings.index')->with('error', 'Cannot update screening, tickets have already been sold.');
+        }
+
         $request->validate([
             'movie_id' => 'required|exists:movies,id',
             'theater_id' => 'required|exists:theaters,id',
             'date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
         ]);
-
         $screening->update($request->all());
 
         return redirect()->route('screenings.index')->with('success', 'Screening updated successfully.');
