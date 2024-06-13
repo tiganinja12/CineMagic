@@ -23,6 +23,10 @@
         </div>
     </form>
 
+    <div class="mb-4">
+        <a href="{{ route('admin.create') }}" class="btn btn-success">Create User</a>
+    </div>
+
     <table class="table">
         <thead>
             <tr>

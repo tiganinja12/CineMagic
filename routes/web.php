@@ -48,6 +48,8 @@ Route::get('/home', [HomeController::class, 'index']);
 
 // Admin routes
 Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth')->name('admin.users');
+Route::get('admin/users/create', [AdminController::class, 'create'])->name('admin.create');
+Route::post('admin/users', [AdminController::class, 'store'])->name('admin.store');
 Route::get('admin/users/{user}', [AdminController::class, 'show'])->name('admin.users.show');
 Route::get('/admin/users/{user}/edit', [AdminController::class, 'edit'])->middleware('auth')->name('admin.users.edit');
 Route::put('/admin/users/{user}', [AdminController::class, 'update'])->middleware('auth')->name('admin.users.update');
