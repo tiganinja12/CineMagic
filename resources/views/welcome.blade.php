@@ -14,6 +14,7 @@
                         @if(Auth::user() && Auth::user()->type === 'A')
                             <li class="list-group-item"><a href="{{ route('screenings.index') }}">View Screenings</a></li>
                             <li class="list-group-item"><a href="{{ route('admin.index') }}">Manage Users</a></li>
+                            <li class="list-group-item"><a href="{{ route('theaters.index') }}">Manage Theaters</a></li>
                         @endif
                     </ul>
                 </div>
