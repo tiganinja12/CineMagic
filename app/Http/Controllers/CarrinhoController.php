@@ -11,7 +11,8 @@ class CarrinhoController extends Controller
 {
     public function index(Request $request)
     {
-
+        $carrinho = $request->session()->get('carrinho', []);
+        //dd($carrinho);
         return view('cart.index')
             ->with('pageTitle', 'Carrinho de compras')
             ->with('carrinho', session('carrinho') ?? []);
