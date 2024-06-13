@@ -9,7 +9,7 @@
         <li><a href="{{ route('movies.index') }}">View Movies</a></li>
         <li><a href="{{ route('screenings.index') }}">View Screenings</a></li>
         @if(Auth::user() && Auth::user()->type === 'A')
-            <li><a href="{{ route('admin.users') }}">Manage Users</a></li>
+            <li><a href="{{ route('admin.index') }}">Manage Users</a></li>
         @endif
         <li><a href="{{ route('logout') }}"
                onclick="event.preventDefault();
