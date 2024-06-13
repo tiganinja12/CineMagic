@@ -51,7 +51,7 @@ class AdminController extends Controller
 
         $user->update($request->all());
 
-        return redirect()->route('admin.users')
+        return redirect()->route('admin.index')
             ->with('alert-msg', 'User updated successfully!')
             ->with('alert-type', 'success');
     }
