@@ -68,6 +68,9 @@ class ScreeningController extends Controller
 
     public function destroy(Screening $screening)
     {
+        if ($screening->tickets()->exists()) {
+            return redirect()->route('screenings.index')->with('error', 'Cannot delete screening, tickets have already been sold.');
+        }
         $screening->delete();
         return redirect()->route('screenings.index')->with('success', 'Screening deleted successfully.');
     }

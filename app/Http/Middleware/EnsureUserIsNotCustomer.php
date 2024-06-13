@@ -19,8 +19,8 @@ class EnsureUserIsNotCustomer
     {
         Log::info('EnsureUserIsNotCustomer middleware called.');
 
-        if (Auth::check() && Auth::user()->customer) {
-            Log::info('User is a customer. Redirecting to /home.');
+        if (Auth::check() && (Auth::user()->customer || Auth::user()->type=='E')) {
+            Log::info('User is a customer or an employee. Redirecting to /home.');
             return redirect('/')->with('error', 'Access denied.');
         }
 
