@@ -14,6 +14,8 @@ use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 
+use App\Http\Middleware\EnsureUserIsNotCustomer;
+
 // Default route
 Route::get('/', function () {
     return view('welcome');
@@ -63,4 +65,6 @@ Route::get('carrinho/show/{ticket}', [CarrinhoController::class,'carrinho_show']
 Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira.create');
 
 // Screening routes
-Route::resource('screenings', ScreeningController::class);
+Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
+    Route::resource('screenings', ScreeningController::class);
+});
