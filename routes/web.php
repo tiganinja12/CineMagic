@@ -16,8 +16,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 
 use App\Http\Middleware\EnsureUserIsNotCustomer;
-use App\Models\Purchase;
-use App\Models\Ticket;
 
 // Default route
 Route::get('/', function () {
