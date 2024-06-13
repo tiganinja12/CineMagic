@@ -51,6 +51,9 @@ class ScreeningController extends Controller
 
     public function update(Request $request, Screening $screening)
     {
+        if ($screening->tickets()->exists()) {
+            return redirect()->route('screenings.index')->with('error', 'Cannot update screening, tickets have already been sold.');
+        }
 
         $request->validate([
             'movie_id' => 'required|exists:movies,id',
