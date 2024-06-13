@@ -4,7 +4,7 @@
 <div class="container">
     <h1>Users List</h1>
 
-    <form method="GET" action="{{ route('admin.users') }}" class="mb-4">
+    <form method="GET" action="{{ route('admin.index') }}" class="mb-4">
         <div class="row">
             <div class="col-md-4">
                 <input type="text" name="search" class="form-control" placeholder="Search by name or email" value="{{ request('search') }}">
@@ -51,6 +51,34 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?');">Delete</button>
                         </form>
+                    @else
+                        @if($user->blocked)
+                            <form action="{{ route('admin.unblock', $user->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                            </form>
+                        @else
+                            <form action="{{ route('admin.block', $user->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-danger btn-sm">Block</button>
+                            </form>
+                        @endif
+
+                        @if($user->trashed())
+                            <form action="{{ route('admin.restore', $user->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-success btn-sm">Restore</button>
+                            </form>
+                        @else
+                            <form action="{{ route('admin.softDelete', $user->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to soft delete this user?');">Soft Delete</button>
+                            </form>
+                        @endif
                     @endif
                 </td>
             </tr>

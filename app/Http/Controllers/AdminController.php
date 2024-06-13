@@ -11,7 +11,7 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
+        $query = User::withTrashed();
 
         // Filter by type if provided
         if ($request->has('type') && $request->type !== 'all') {
@@ -27,7 +27,7 @@ class AdminController extends Controller
 
         $users = $query->get();
 
-        return view('admin.users', compact('users'));
+        return view('admin.index', compact('users'));
     }
 
     public function edit(User $user)
@@ -74,7 +74,7 @@ class AdminController extends Controller
 
         User::create($validatedData);
 
-        return redirect()->route('admin.users')->with('success', 'User created successfully');
+        return redirect()->route('admin.index')->with('success', 'User created successfully');
     }
 
     public function destroy($id)
@@ -86,7 +86,53 @@ class AdminController extends Controller
             $user->delete();
         }
 
-        return redirect()->route('admin.users')->with('success', 'User deleted successfully');
+        return redirect()->route('admin.index')->with('success', 'User deleted successfully');
+    }
+
+    public function block($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->type === 'C') {
+            $user->blocked = true;
+            $user->save();
+        }
+
+        return redirect()->route('admin.index')->with('success', 'User blocked successfully');
+    }
+
+    public function unblock($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->type === 'C') {
+            $user->blocked = false;
+            $user->save();
+        }
+
+        return redirect()->route('admin.index')->with('success', 'User unblocked successfully');
+    }
+
+    public function softDelete($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->type === 'C') {
+            $user->delete();
+        }
+
+        return redirect()->route('admin.index')->with('success', 'User deleted successfully');
+    }
+
+    public function restore($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+
+        if ($user->type === 'C') {
+            $user->restore();
+        }
+
+        return redirect()->route('admin.index')->with('success', 'User restored successfully');
     }
 }
 

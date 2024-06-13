@@ -47,13 +47,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/home', [HomeController::class, 'index']);
 
 // Admin routes
-Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth')->name('admin.users');
+Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth')->name('admin.index');
 Route::get('admin/users/create', [AdminController::class, 'create'])->name('admin.create');
 Route::post('admin/users', [AdminController::class, 'store'])->name('admin.store');
 Route::get('admin/users/{user}', [AdminController::class, 'show'])->name('admin.show');
 Route::get('/admin/users/{user}/edit', [AdminController::class, 'edit'])->middleware('auth')->name('admin.edit');
 Route::put('/admin/users/{user}', [AdminController::class, 'update'])->middleware('auth')->name('admin.update');
 Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
+Route::patch('admin/{user}/block', [AdminController::class, 'block'])->name('admin.block');
+Route::patch('admin/{user}/unblock', [AdminController::class, 'unblock'])->name('admin.unblock');
+Route::delete('admin/{user}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
+Route::patch('admin/{user}/restore', [AdminController::class, 'restore'])->name('admin.restore');
+
 
 // Movie routes
 Route::resource('movies', MovieController::class);
