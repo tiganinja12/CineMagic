@@ -26,7 +26,7 @@
                                     <td>{{ $screening->date }}</td>
                                     <td>{{ $screening->start_time }}</td>
                                     <td>
-                                        <a href="{{ route('screenings.edit', $screening) }}" class="btn btn-sm btn-warning">Edit</a>
+                                        <a href="{{ route('screenings.edit', ['screening' => $screening]) }}" class="btn btn-sm btn-warning">Edit</a>
                                         <form action="{{ route('screenings.destroy', $screening) }}" method="POST" style="display:inline-block;">
                                             @csrf
                                             @method('DELETE')

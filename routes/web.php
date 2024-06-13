@@ -16,6 +16,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 
 use App\Http\Middleware\EnsureUserIsNotCustomer;
+use App\Models\Purchase;
+use App\Models\Ticket;
 
 // Default route
 Route::get('/', function () {
@@ -86,9 +88,11 @@ Route::get('carrinho/show/{ticket}', [CarrinhoController::class,'carrinho_show']
 
 Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira.create');
 
+
 // Screening routes
 Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
     Route::resource('screenings', ScreeningController::class);
     Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
     Route::put('screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
+
 });
