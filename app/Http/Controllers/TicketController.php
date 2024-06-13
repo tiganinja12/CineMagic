@@ -120,12 +120,12 @@ class TicketController extends Controller
         $carrinho = $request->session()->get('carrinho', []);
         $customer = Customer::find(Auth::user()->id);
 
-        //dd($cliente);
+        //dd($customer->user);
 
         $purchase = Purchase::create([
             'customer_id' => $customer->id,
             'date' => date('Y-m-d'),
-            'ticket_price' => $configuration->ticket_price * count($carrinho),
+            'customer_email' => $customer->user->email,
             'discount' => $configuration->registered_customer_ticket_discount,
             'total_price' => ($configuration->preco_bilhete_sem_iva - $configuration->registered_customer_ticket_discount) * count($carrinho),
             'nif' => $customer->nif,
@@ -144,7 +144,7 @@ class TicketController extends Controller
                 'customer_id' => $customer->id,
                 'screening_id' => $row['screening'],
                 'seat_id' => $row['seat_id'],
-                'ticket_price' => $configuration->ticket_price,
+                'price' => $configuration->ticket_price,
                 'purchase_id' => $purchase->id,
                 'status' => 'valid'
             ]);
