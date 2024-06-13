@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
+        'type',
         'password',
         'photo_filename',
     ];
@@ -52,8 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->photo_filename ? asset('storage/photos' . $this->photo_filename) : asset('storage/photos/default.png');
     }
 
-    public function customer()
-    {
+    public function customer() {
         return $this->hasOne(Customer::class, 'id', 'id');
     }
 }

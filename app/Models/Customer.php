@@ -17,5 +17,11 @@ class Customer extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id', 'id') -> withTrashed();
+
+    }
+
+    public function purchases() {
+        return $this->hasMany(Purchase::class, 'customer_id', 'id');
     }
 }
+
