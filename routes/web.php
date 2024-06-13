@@ -94,5 +94,7 @@ Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
     Route::resource('screenings', ScreeningController::class);
     Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
     Route::put('screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
-
+    Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
+    Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
+    Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 });
