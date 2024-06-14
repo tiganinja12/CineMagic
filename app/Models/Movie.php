@@ -23,4 +23,9 @@ class Movie extends Model
     {
         return $this->hasMany(Screening::class);
     }
+
+    public function hasActiveScreenings()
+    {
+        return $this->screenings()->where('date', '>=', now())->exists();
+    }
 }

@@ -84,12 +84,22 @@
                             <div class="card-footer">
                                 <a class="btn btn-primary" href="{{ route('movies.show', $movie) }}">View Details</a>
                                 @auth
-                                    <a class="btn btn-secondary" href="{{ route('movies.edit', $movie) }}">Edit</a>
-                                    <form action="{{ route('movies.destroy', $movie) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+                                    @if(auth()->user()->type === 'A')
+                                        <a class="btn btn-secondary" href="{{ route('movies.edit', $movie) }}">Edit</a>
+                                        @if($movie->trashed())
+                                            <form action="{{ route('movies.restore', $movie->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="btn btn-success">Restore</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('movies.destroy', $movie->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        @endif
+                                    @endif
                                 @endauth
                             </div>
                         </div>

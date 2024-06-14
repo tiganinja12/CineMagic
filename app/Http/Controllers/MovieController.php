@@ -34,6 +34,10 @@ class MovieController extends Controller
             $query->where('title', 'like', '%' . $filterByTitle . '%');
         }
 
+        if (auth()->user() && auth()->user()->type === 'A') {
+            $query->withTrashed();
+        }
+
         $movies = $query->paginate(10);
         $genres = Genre::all();
 
@@ -132,9 +136,20 @@ class MovieController extends Controller
 
     public function destroy(Movie $movie)
     {
+        if ($movie->hasActiveScreenings()) {
+            return redirect()->route('movies.index')->with('error', 'Cannot delete a movie that has active screenings.');
+        }
+
         $movie->delete();
-        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully');
+        return redirect()->route('movies.index')->with('success', 'Movie deleted successfully.');
     }
+
+    public function restore($id)
+    {
+        $movie = Movie::withTrashed()->findOrFail($id);
+        $movie->restore();
+        return redirect()->route('movies.index')->with('success', 'Movie restored successfully.');
+ }
 }
 
 

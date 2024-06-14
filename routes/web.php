@@ -72,6 +72,8 @@ Route::patch('admin/{user}/restore', [AdminController::class, 'restore'])->name(
 // Movie routes
 Route::resource('movies', MovieController::class);
 Route::get('movies/{movie}/{screening}', [MovieController::class, 'show_session'])->name('movies.show_session');
+Route::patch('movies/{movie}/restore', [MovieController::class, 'restore'])->name('movies.restore');
+
 
 // Purchase routes
 Route::post('/purchases', [PurchaseController::class, 'store'])->middleware('auth');
