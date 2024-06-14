@@ -92,6 +92,7 @@ Route::get('carrinho/show/{ticket}', [CarrinhoController::class,'carrinho_show']
 Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 Route::get('statistics/ticket-sales-by-month', [StatisticsController::class, 'ticketSalesByMonth'])->name('statistics.ticketSalesByMonth');
 Route::get('statistics/average-sales-by-movie', [StatisticsController::class, 'averageSalesByMovie'])->name('statistics.averageSalesByMovie');
+Route::get('/statistics/average-sales-by-genre', [StatisticsController::class, 'averageSalesByGenre'])->name('statistics.averageSalesByGenre');
 Route::get('statistics/sales-by-customer', [StatisticsController::class, 'salesByCustomer'])->name('statistics.salesByCustomer');
 Route::get('/statistics/ticketSalesByYear', [StatisticsController::class, 'ticketSalesByYear'])->name('statistics.ticketSalesByYear');
 
