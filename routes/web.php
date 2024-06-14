@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\GenreController;
+use App\Http\Controllers\SeatController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -101,9 +102,16 @@ Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
     Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
 
     // Theater routes
-Route::resource('theaters', TheaterController::class)->except(['show']);
+Route::resource('theaters', TheaterController::class);
 Route::patch('theaters/{theater}/restore', [TheaterController::class, 'restore'])->name('theaters.restore');
 Route::delete('theaters/{theater}/softDelete', [TheaterController::class, 'softDelete'])->name('theaters.softDelete');
+
+    // Seat routes
+Route::get('theaters/{theater}/seats/create', [SeatController::class, 'create'])->name('theaters.seats.create');
+Route::post('theaters/{theater}/seats', [SeatController::class, 'store'])->name('theaters.seats.store');
+Route::get('theaters/{theater}/seats/bulkCreate', [SeatController::class, 'bulkCreate'])->name('theaters.seats.bulkCreate');
+Route::post('theaters/{theater}/seats/bulkStore', [SeatController::class, 'bulkStore'])->name('theaters.seats.bulkStore');
+Route::delete('theaters/{theater}/seats/{seat}', [SeatController::class, 'destroy'])->name('theaters.seats.destroy');
 
     // Genre routes
 Route::resource('genres', GenreController::class)->except(['show']);

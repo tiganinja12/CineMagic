@@ -1,3 +1,4 @@
+<!-- resources/views/theaters/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -52,6 +53,7 @@
                             <button type="submit" class="btn btn-success btn-sm">Restore</button>
                         </form>
                     @endif
+                    <a href="{{ route('theaters.show', $theater->id) }}" class="btn btn-primary btn-sm">Manage Seats</a>
                 </td>
             </tr>
             @endforeach

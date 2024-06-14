@@ -52,6 +52,12 @@ class TheaterController extends Controller
         return view('theaters.edit', compact('theater'));
     }
 
+    public function show($id)
+    {
+        $theater = Theater::with('seats')->findOrFail($id);
+        return view('theaters.show', compact('theater'));
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([

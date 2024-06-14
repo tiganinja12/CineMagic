@@ -14,6 +14,8 @@ class Seat extends Model
         'theater_id', 'row', 'seat_number'
     ];
 
+    public $timestamps = false;
+
     public function theater()
     {
         return $this->belongsTo(Theater::class);
