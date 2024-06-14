@@ -11,7 +11,7 @@ class ScreeningController extends Controller
 {
     public function index()
     {
-        $screenings = Screening::with(['movie', 'theater'])->get();
+        $screenings = Screening::with(['movie', 'theater'])->paginate(10);
         return view('screenings.index', compact('screenings'));
     }
 

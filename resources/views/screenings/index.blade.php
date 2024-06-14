@@ -37,6 +37,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $screenings->links() }}
                 </div>
             </div>
         </div>
