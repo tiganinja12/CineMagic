@@ -232,6 +232,7 @@
                                         <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                             {{ __('Profile') }}
                                         </a>
+                                        <a class="nav-link" href="{{ route('statistics.index') }}">Statistics</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('password.change') }}">
                                         Change Password
