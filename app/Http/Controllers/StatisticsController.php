@@ -49,31 +49,48 @@ class StatisticsController extends Controller
         return view('statistics.ticketSalesByYear', compact('ticketSalesByYear'));
     }    
 
+    
     public function averageSalesByMovie(Request $request)
     {
         $filterByGenre = $request->input('genre');
         $filterByName = $request->input('name');
-
+    
         $query = Movie::join('screenings', 'movies.id', '=', 'screenings.movie_id')
             ->join('tickets', 'screenings.id', '=', 'tickets.screening_id')
-            ->select('movies.title', DB::raw('AVG(tickets.price) as average_sales'));
-
+            ->select('movies.title', DB::raw('SUM(tickets.price) / COUNT(DISTINCT screenings.id) as average_sales'));
+    
         if ($filterByGenre) {
             $query->where('movies.genre_code', $filterByGenre);
         }
-
+    
         if ($filterByName) {
             $query->where('movies.title', 'like', '%' . $filterByName . '%');
         }
-
+    
         $averageSalesByMovie = $query->groupBy('movies.title')
             ->orderBy('average_sales', 'desc')
             ->paginate(10, ['*'], 'movies_page');
-
+    
         $genres = Genre::all();
-
+    
         return view('statistics.averageSalesByMovie', compact('averageSalesByMovie', 'genres', 'filterByGenre', 'filterByName'));
     }
+
+
+    public function averageSalesByGenre()
+    {
+        $averageSalesByGenre = Genre::join('movies', 'genres.code', '=', 'movies.genre_code')
+            ->join('screenings', 'movies.id', '=', 'screenings.movie_id')
+            ->join('tickets', 'screenings.id', '=', 'tickets.screening_id')
+            ->select('genres.name', DB::raw('SUM(tickets.price) / COUNT(DISTINCT movies.id) as average_sales'))
+            ->groupBy('genres.name')
+            ->orderBy('average_sales', 'desc')
+            ->paginate(10);
+    
+        return view('statistics.averageSalesByGenre', compact('averageSalesByGenre'));
+    }
+    
+        
 
     public function salesByCustomer()
     {

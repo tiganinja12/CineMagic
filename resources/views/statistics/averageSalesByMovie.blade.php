@@ -2,22 +2,22 @@
 
 @section('content')
 <div class="container">
-    <h1>Average Ticket Sales by Movie</h1>
+    <h1>Average Ticket Sales By Movie</h1>
 
-    <form method="GET" action="{{ route('statistics.averageSalesByMovie') }}">
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <select name="genre" class="form-select">
+    <form method="GET" action="{{ route('statistics.averageSalesByMovie') }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="text" name="name" class="form-control" placeholder="Search by movie title" value="{{ request('name') }}">
+            </div>
+            <div class="col-md-4">
+                <select name="genre" class="form-control">
                     <option value="">All Genres</option>
                     @foreach($genres as $genre)
                         <option value="{{ $genre->code }}" {{ request('genre') == $genre->code ? 'selected' : '' }}>{{ $genre->name }}</option>
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-3">
-                <input type="text" name="name" class="form-control" placeholder="Movie Name" value="{{ request('name') }}">
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <button type="submit" class="btn btn-primary">Filter</button>
             </div>
         </div>
@@ -26,20 +26,20 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Movie</th>
+                <th>Movie Title</th>
                 <th>Average Sales</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($averageSalesByMovie as $sales)
+            @foreach($averageSalesByMovie as $sale)
                 <tr>
-                    <td>{{ $sales->title }}</td>
-                    <td>{{ $sales->average_sales }}</td>
+                    <td>{{ $sale->title }}</td>
+                    <td>{{ number_format($sale->average_sales, 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    {{ $averageSalesByMovie->appends(request()->query())->links('pagination::bootstrap-4') }}
+    {{ $averageSalesByMovie->links() }}
 </div>
 @endsection
