@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TheaterController;
 use App\Http\Controllers\GenreController;
 use App\Http\Controllers\SeatController;
+use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
@@ -87,6 +88,12 @@ Route::delete('carrinho', [CarrinhoController::class, 'destroy'])->name('carrinh
 Route::post('carrinho', [CarrinhoController::class, 'store'])->name('carrinho.store');
 Route::get('carrinho/show/{ticket}', [CarrinhoController::class,'carrinho_show'])->name('carrinho.show');
 
+// Statistics routes
+Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
+Route::get('statistics/ticket-sales-by-month', [StatisticsController::class, 'ticketSalesByMonth'])->name('statistics.ticketSalesByMonth');
+Route::get('statistics/average-sales-by-movie', [StatisticsController::class, 'averageSalesByMovie'])->name('statistics.averageSalesByMovie');
+Route::get('statistics/sales-by-customer', [StatisticsController::class, 'salesByCustomer'])->name('statistics.salesByCustomer');
+Route::get('/statistics/ticketSalesByYear', [StatisticsController::class, 'ticketSalesByYear'])->name('statistics.ticketSalesByYear');
 
 
 Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira.create');
