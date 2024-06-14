@@ -15,6 +15,7 @@
                             <li class="list-group-item"><a href="{{ route('screenings.index') }}">View Screenings</a></li>
                             <li class="list-group-item"><a href="{{ route('admin.index') }}">Manage Users</a></li>
                             <li class="list-group-item"><a href="{{ route('theaters.index') }}">Manage Theaters</a></li>
+                            <li class="list-group-item"><a href="{{ route('genres.index') }}">Manage Movie Genres</a></li>
                         @endif
                     </ul>
                 </div>
