@@ -80,14 +80,15 @@ class AdminController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-
-        // Ensure only Admin and Employee can be deleted
+    
+        // Ensure only Admin and Employee can be permanently deleted
         if (in_array($user->type, ['A', 'E'])) {
-            $user->delete();
+            $user->forceDelete(); // Permanently delete
+            return redirect()->route('admin.index')->with('success', 'User permanently deleted successfully.');
         }
-
-        return redirect()->route('admin.index')->with('success', 'User deleted successfully');
-    }
+    
+        return redirect()->route('admin.index')->with('error', 'Only Admins and Employees can be permanently deleted.');
+    }    
 
     public function block($id)
     {
@@ -116,13 +117,15 @@ class AdminController extends Controller
     public function softDelete($id)
     {
         $user = User::findOrFail($id);
-
+    
         if ($user->type === 'C') {
-            $user->delete();
+            $user->delete(); // Soft delete
+            return redirect()->route('admin.index')->with('success', 'Customer soft deleted successfully.');
         }
-
-        return redirect()->route('admin.index')->with('success', 'User deleted successfully');
+    
+        return redirect()->route('admin.index')->with('error', 'Only customers can be soft deleted.');
     }
+    
 
     public function restore($id)
     {
