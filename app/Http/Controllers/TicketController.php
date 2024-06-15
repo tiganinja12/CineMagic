@@ -65,20 +65,42 @@ class TicketController extends Controller
 
     }
 
-    public function downloadBilhetePDF(Ticket $ticket)
+    /*public function downloadBilhetePDF(Ticket $ticket)
     {
         $screening=Screening::find($ticket->screening_id);
         $movie=Movie::find($screening->movie_id);
         $purchase=Purchase::find($ticket->purchase_id);
         $theater=Theater::find($screening->theater_id);
         $seat=Seat::find($ticket->seat_id);
-        $customer=Customer::find($ticket->customer_id);
+        dd($customer);
         $user=User::find($customer->id);
 
-        $pdf = PDF::loadView('ticket\pdf',compact('ticket','movie','purchase','theater','screening','seat','customer','user'));
-        return $pdf->download('ticket.pdf');
+        $pdf = PDF::loadView('tickets\pdf',compact('ticket','movie','purchase','theater','screening','seat','customer','user'));
+        return $pdf->download('tickets.pdf');
 
+    }*/
+
+    public function downloadBilhetePDF(Ticket $ticket)
+{
+    // Carregar as relações necessárias
+    $ticket->load('screening.movie', 'screening.theater', 'seat', 'purchase.customer');
+
+    // Acessar as relações carregadas
+    $screening = $ticket->screening;
+    $movie = $screening->movie;
+    $theater = $screening->theater;
+    $purchase = $ticket->purchase;
+    $seat = $ticket->seat;
+    $customer = $purchase->customer;
+    $user = $customer ? User::find($customer->id) : null;
+
+    if (!$customer) {
+        return back()->withErrors(['message' => 'Customer not found for the given ticket.']);
     }
+
+    $pdf = PDF::loadView('tickets.pdf', compact('ticket', 'movie', 'purchase', 'theater', 'screening', 'seat', 'customer', 'user'));
+    return $pdf->download('tickets.pdf');
+}
 
 
     public function edit(Ticket $ticket)
@@ -127,7 +149,7 @@ class TicketController extends Controller
             'date' => date('Y-m-d'),
             'customer_email' => $customer->user->email,
             'discount' => $configuration->registered_customer_ticket_discount,
-            'total_price' => ($configuration->preco_bilhete_sem_iva - $configuration->registered_customer_ticket_discount) * count($carrinho),
+            'total_price' => ($configuration->ticket_price - $configuration->registered_customer_ticket_discount) * count($carrinho),
             'nif' => $customer->nif,
             'payment_type' => $customer->payment_type,
             'payment_ref' => $customer->payment_ref,

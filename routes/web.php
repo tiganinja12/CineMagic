@@ -98,6 +98,11 @@ Route::get('/statistics/ticketSalesByYear', [StatisticsController::class, 'ticke
 
 Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira.create');
 
+Route::get('purchases/{user}', [PurchaseController::class, 'show'])->name('purchases.show');
+Route::get('purchases/tickets/{purchase}', [PurchaseController::class, 'show_ticket'])->name('purchases.show_ticket');
+
+Route::get('tickets/{ticket}',[TicketController::class,'downloadBilhetePDF'])->name('ticket.downloadBilhetePDF');
+
 
 // Screening routes
 Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
