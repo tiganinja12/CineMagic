@@ -50,7 +50,7 @@
                                                             {{ $screening->start_time }}
                                                         </td>
                                                         <td class="px-6 py-4">
-                                                            {{ $screening->theater_id }}
+                                                            {{ $screening->theater->name }}
                                                         </td>
                                                         <td class="px-6 py-4 text-center">
                                                             <a
