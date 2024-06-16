@@ -25,10 +25,12 @@
 
     <!-- Flowbite CSS -->
 
-
     <link rel="preload" href="http://[::1]:5173/node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
         a {
@@ -63,6 +65,11 @@
 
         body {
             background-color: #111827;
+            color: #fff; /* Ensure text color is white */
+        }
+
+        select.form-control, input.form-control {
+            color: #000; /* Set input and select text color to black */
         }
 
         @media (min-width: 991.98px) {
@@ -138,46 +145,16 @@
             margin: 0;
 
         }
-    </style>
-    <script type="text/javascript">
-        // Graph
-        /*var ctx = document.getElementById("myChart");
 
-        var myChart = new Chart(ctx, {
-            type: "line",
-            data: {
-                labels: [
-                    "Sunday",
-                    "Monday",
-                    "Tuesday",
-                    "Wednesday",
-                    "Thursday",
-                    "Friday",
-                    "Saturday",
-                ],
-                datasets: [{
-                    data: [15339, 21345, 18483, 24003, 23489, 24092, 12034],
-                    lineTension: 0,
-                    backgroundColor: "transparent",
-                    borderColor: "#007bff",
-                    borderWidth: 4,
-                    pointBackgroundColor: "#007bff",
-                }, ],
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: false,
-                        },
-                    }, ],
-                },
-                legend: {
-                    display: false,
-                },
-            },
-        });*/
-    </script>
+        .modal-body label[for="nif"], .modal-body label[for="payment_ref"], .modal-body label[for="payment_type"] {
+                        color: black !important;
+                    }
+
+                    /* Ensures input text for NIF and payment reference is black */
+                    .modal-body #nif, .modal-body #payment_ref {
+                        color: black !important;
+                    }
+    </style>
 </head>
 
 <body>
@@ -287,6 +264,9 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>

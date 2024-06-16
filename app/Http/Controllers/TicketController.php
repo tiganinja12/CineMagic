@@ -136,30 +136,51 @@ class TicketController extends Controller
         return view('bilhetes.show', compact('purchases', 'purchase', 'ticket','screenings'));
     }
 
+    public function showCart(Request $request)
+    {
+        $carrinho = $request->session()->get('carrinho', []);
+        $customer = Customer::find(Auth::user()->id);
+    
+        return view('cart', compact('carrinho', 'customer'));
+    }
+    
     public function create(Request $request) {
-
         $configuration = Configuration::first();
         $carrinho = $request->session()->get('carrinho', []);
         $customer = Customer::find(Auth::user()->id);
     
+        // Validate the inputs
+        $validatedData = $request->validate([
+            'payment_type' => 'required|string',
+            'nif' => 'nullable|digits:9',
+            'payment_ref' => 'nullable|digits:16',
+        ]);
+    
+        // Update customer with the latest inputs
+        $customer->update([
+            'payment_type' => $validatedData['payment_type'],
+            'nif' => $validatedData['nif'] ?? $customer->nif,
+            'payment_ref' => $validatedData['payment_ref'] ?? $customer->payment_ref,
+        ]);
+    
+        // Create the purchase
         $purchase = Purchase::create([
             'customer_id' => $customer->id,
             'date' => date('Y-m-d'),
             'customer_email' => $customer->user->email,
             'discount' => $configuration->registered_customer_ticket_discount,
             'total_price' => ($configuration->ticket_price - $configuration->registered_customer_ticket_discount) * count($carrinho),
-            'nif' => $customer->nif,
-            'payment_type' => $request->input('payment_type'), // Use selected payment type
-            'payment_ref' => $customer->payment_ref,
+            'nif' => $validatedData['nif'], // Use input NIF
+            'payment_type' => $validatedData['payment_type'], // Use selected payment type
+            'payment_ref' => $validatedData['payment_ref'], // Use input payment reference
             'screening_id' => $request->screening_id,
             'seat_id' => $request->seat_id,
             'customer_name' => Auth::user()->name
         ]);
     
-        $purchase->save();
-    
-        foreach($carrinho as $row) {
-            $ticket = Ticket::create([
+        // Create the tickets
+        foreach ($carrinho as $row) {
+            Ticket::create([
                 'customer_id' => $customer->id,
                 'screening_id' => $row['screening'],
                 'seat_id' => $row['seat_id'],
@@ -167,15 +188,15 @@ class TicketController extends Controller
                 'purchase_id' => $purchase->id,
                 'status' => 'valid'
             ]);
-    
-            $ticket->save();
         }
     
+        // Clear the cart session
         $request->session()->forget('carrinho');
+    
         return back()
             ->with('alert-msg', 'Bilhetes comprados com sucesso!')
             ->with('alert-type', 'danger');
     }
-    
 
+    
 }
