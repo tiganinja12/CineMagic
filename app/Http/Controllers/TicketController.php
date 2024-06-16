@@ -70,17 +70,23 @@ class TicketController extends Controller
 
     public function show(Ticket $ticket)
     {
-        $ticket->load('customer.user', 'screening.movie', 'screening.theater', 'seat');
-
-        return view('tickets.show', compact('ticket'));
+        // Load the related models
+        $ticket->load('purchase.customer.user', 'screening.movie', 'screening.theater', 'seat');
+    
+        // Get the user
+        $user = $ticket->purchase->customer->user;
+    
+        // Return the view with the ticket and user data
+        return view('tickets.show', compact('ticket', 'user'));
     }
+    
 
     public function downloadTicketPDF(Ticket $ticket)
     {
-        $ticket->load('customer.user', 'screening.movie', 'screening.theater', 'seat');
+        $ticket->load('purchase.customer.user', 'screening.movie', 'screening.theater', 'seat');
     
-        $user = $ticket->customer ? $ticket->customer->user : null;
-    
+        $user = $ticket->purchase->customer->user;
+        
         $pdf = PDF::loadView('tickets.pdf', [
             'user' => $user,
             'ticket' => $ticket,
@@ -168,13 +174,11 @@ class TicketController extends Controller
                 'status' => 'valid'
             ]);
     
-            // Generate QR code
-            $qrCode = QrCode::format('png')->size(200)->generate(route('tickets.show', $ticket->id));
-            $qrCodePath = 'qrcodes/ticket_' . $ticket->id . '.png';
-            Storage::disk('public')->put($qrCodePath, $qrCode);
+            // Generate QR code URL
+            $qrCodeUrl = route('tickets.show', $ticket->id) . '?token=' . bin2hex(random_bytes(16));
     
             // Save the QR code URL
-            $ticket->update(['qrcode_url' => $qrCodePath]);
+            $ticket->update(['qrcode_url' => $qrCodeUrl]);
         }
     
         // Clear the cart session

@@ -13,39 +13,40 @@
 </head>
 
 <body>
-    <div class="flex items-center justify-center min-h-screen align-center bg-gray-100 ">
+    <div class="flex items-center justify-center min-h-screen items-center align-center bg-gray-100 ">
         <div class="object-scale-down">
-            Nome: {{ $user ? $user->name : 'N/A' }}
+            Nome: {{ $user->name }}
             <br>
-            <img class="h-20 mt-5 rounded-full" src="{{ $user && $user->photo_filename ? asset('storage/photos/' . $user->photo_filename) : asset('storage/photos/default.png') }}">
+            <img class="h-20 mt-5  rounded-full" src="{{ $user->photo_filename ? asset('storage/photos/' . $user->photo_filename) : asset('storage/photos/default.png') }}">
         </div>
         <div class="w-3/5 bg-white shadow-lg">
-            <div class="flex justify-center p-4">
-                <div class="border-b border-gray-200 shadow">
-                    <p class="px-6 py-4 text-sm text-gray-500">
-                        Id do bilhete: {{ $ticket->id }}
-                    </p>
-                    <p class="px-6 py-4 text-sm text-gray-500">
-                        Filme: {{ $movie->title }}
-                    </p>
-                    <p class="px-6 py-4">
-                        Sala: {{ $theater->name }}
-                    </p>
-                    <p class="px-6 py-4 text-sm text-gray-500">
-                        Data: {{ $purchase->date }}
-                    </p>
-                    <p class="px-6 py-4 text-sm text-gray-500">
-                        Horario: {{ $screening->start_time }}
-                    </p>
-                    <p class="px-6 py-4 text-sm text-gray-500">
-                        Lugar: {{ $seat->row }}-{{ $seat->seat_number }}
-                    </p>
-                    <div class="px-6 py-4">
-                        {!! QrCode::size(200)->generate(route('tickets.show', ['ticket' => $ticket->id])) !!}
-                    </div>
+        </div>
+        <div class="flex justify-center p-4">
+            <div class="border-b border-gray-200 shadow">
+                <p class="px-6 py-4 text-sm text-gray-500">
+                    Id do bilhete: {{ $ticket->id }}
+                </p>
+                <p class="px-6 py-4 text-sm text-gray-500">
+                    Filme: {{ $ticket->screening->movie->title }}
+                </p>
+                <p class="px-6 py-4">
+                    Sala: {{ $ticket->screening->theater->name }}
+                </p>
+                <p class="px-6 py-4 text-sm text-gray-500">
+                    Data: {{ $ticket->screening->date }}
+                </p>
+                <p class="px-6 py-4 text-sm text-gray-500">
+                    Horario: {{ $ticket->screening->start_time }}
+                </p>
+                <p class="px-6 py-4 text-sm text-gray-500">
+                    Lugar: {{ $ticket->seat->row }}-{{ $ticket->seat->seat_number }}
+                </p>
+                <div class="px-6 py-4">
+                    <img src="{{ asset('storage/' . $ticket->qrcode_url) }}" alt="QR Code">
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>

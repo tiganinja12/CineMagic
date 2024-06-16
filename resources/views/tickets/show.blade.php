@@ -8,7 +8,7 @@
                     <div class="card-header">Ticket Details</div>
                     <div class="card-body">
                         <p><strong>Ticket ID:</strong> {{ $ticket->id }}</p>
-                        <p><strong>Customer:</strong> {{ $ticket->customer ? $ticket->customer->user->name : 'N/A' }}</p>
+                        <p><strong>Customer:</strong> {{ $user->name }}</p>
                         <p><strong>Movie:</strong> {{ $ticket->screening->movie->title }}</p>
                         <p><strong>Theater:</strong> {{ $ticket->screening->theater->name }}</p>
                         <p><strong>Date:</strong> {{ $ticket->screening->date }}</p>

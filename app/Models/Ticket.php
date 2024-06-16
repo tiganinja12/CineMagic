@@ -28,9 +28,4 @@ class Ticket extends Model
         return $this->belongsTo(Purchase::class);
     }
 
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
-
 }
