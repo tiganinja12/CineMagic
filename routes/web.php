@@ -57,20 +57,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Home route
 Route::get('/home', [HomeController::class, 'index']);
 
-// Admin routes
-Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth')->name('admin.index');
-Route::get('admin/users/create', [AdminController::class, 'create'])->name('admin.create');
-Route::post('admin/users', [AdminController::class, 'store'])->name('admin.store');
-Route::get('admin/users/{user}', [AdminController::class, 'show'])->name('admin.show');
-Route::get('/admin/users/{user}/edit', [AdminController::class, 'edit'])->middleware('auth')->name('admin.edit');
-Route::put('/admin/users/{user}', [AdminController::class, 'update'])->middleware('auth')->name('admin.update');
-Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
-Route::patch('admin/{user}/block', [AdminController::class, 'block'])->name('admin.block');
-Route::patch('admin/{user}/unblock', [AdminController::class, 'unblock'])->name('admin.unblock');
-Route::delete('admin/{user}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
-Route::patch('admin/{user}/restore', [AdminController::class, 'restore'])->name('admin.restore');
-
-
 // Movie routes
 Route::resource('movies', MovieController::class);
 Route::get('movies/{movie}/{screening}', [MovieController::class, 'show_session'])->name('movies.show_session');
@@ -102,17 +88,35 @@ Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira
 Route::get('purchases/{user}', [PurchaseController::class, 'show'])->name('purchases.show');
 Route::get('purchases/tickets/{purchase}', [PurchaseController::class, 'show_ticket'])->name('purchases.show_ticket');
 
-Route::get('tickets/{ticket}',[TicketController::class,'downloadBilhetePDF'])->name('ticket.downloadBilhetePDF');
+// Ticket Routes
+Route::get('tickets/{ticket}/download', [TicketController::class, 'downloadTicketPDF'])->name('tickets.downloadTicketPDF');
+Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
 
 
-// Screening routes
+// ADMIN PERMISSIONS
 Route::middleware(['auth', EnsureUserIsNotCustomer::class])->group(function () {
+
+    // Screening routes
     Route::resource('screenings', ScreeningController::class);
     Route::get('screenings/{screening}/edit', [ScreeningController::class, 'edit'])->name('screenings.edit');
     Route::put('screenings/{screening}', [ScreeningController::class, 'update'])->name('screenings.update');
     Route::get('screenings/create', [ScreeningController::class, 'create'])->name('screenings.create');
     Route::post('screenings', [ScreeningController::class, 'store'])->name('screenings.store');
     Route::delete('screenings/{screening}', [ScreeningController::class, 'destroy'])->name('screenings.destroy');
+
+
+    // Admin routes
+Route::get('/admin/users', [AdminController::class, 'index'])->middleware('auth')->name('admin.index');
+Route::get('admin/users/create', [AdminController::class, 'create'])->name('admin.create');
+Route::post('admin/users', [AdminController::class, 'store'])->name('admin.store');
+Route::get('admin/users/{user}', [AdminController::class, 'show'])->name('admin.show');
+Route::get('/admin/users/{user}/edit', [AdminController::class, 'edit'])->middleware('auth')->name('admin.edit');
+Route::put('/admin/users/{user}', [AdminController::class, 'update'])->middleware('auth')->name('admin.update');
+Route::delete('admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
+Route::patch('admin/{user}/block', [AdminController::class, 'block'])->name('admin.block');
+Route::patch('admin/{user}/unblock', [AdminController::class, 'unblock'])->name('admin.unblock');
+Route::delete('admin/{user}', [AdminController::class, 'softDelete'])->name('admin.softDelete');
+Route::patch('admin/{user}/restore', [AdminController::class, 'restore'])->name('admin.restore');
 
     // Theater routes
 Route::resource('theaters', TheaterController::class);

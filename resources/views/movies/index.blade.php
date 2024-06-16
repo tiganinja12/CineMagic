@@ -31,6 +31,12 @@
                                     <input id="title" value="{{ old('title', $filterByTitle) }}" name="title" type="text" class="form-control">
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <label for="synopsis" class="col-md-4 col-form-label text-md-end">Synopsis</label>
+                                <div class="col-md-6">
+                                    <input id="synopsis" value="{{ old('synopsis', $filterBySynopsis) }}" name="synopsis" type="text" class="form-control">
+                                </div>
+                            </div>
                             <div class="row mb-0">
                                 <div class="col-md-8 offset-md-4">
                                     <div class="d-flex flex-row justify-content-start">

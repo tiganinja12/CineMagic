@@ -15,6 +15,8 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class TicketController extends Controller
 {
@@ -65,43 +67,39 @@ class TicketController extends Controller
 
     }
 
-    /*public function downloadBilhetePDF(Ticket $ticket)
+
+    public function show(Ticket $ticket)
     {
-        $screening=Screening::find($ticket->screening_id);
-        $movie=Movie::find($screening->movie_id);
-        $purchase=Purchase::find($ticket->purchase_id);
-        $theater=Theater::find($screening->theater_id);
-        $seat=Seat::find($ticket->seat_id);
-        dd($customer);
-        $user=User::find($customer->id);
-
-        $pdf = PDF::loadView('tickets\pdf',compact('ticket','movie','purchase','theater','screening','seat','customer','user'));
-        return $pdf->download('tickets.pdf');
-
-    }*/
-
-    public function downloadBilhetePDF(Ticket $ticket)
-{
-    // Carregar as relações necessárias
-    $ticket->load('screening.movie', 'screening.theater', 'seat', 'purchase.customer');
-
-    // Acessar as relações carregadas
-    $screening = $ticket->screening;
-    $movie = $screening->movie;
-    $theater = $screening->theater;
-    $purchase = $ticket->purchase;
-    $seat = $ticket->seat;
-    $customer = $purchase->customer;
-    $user = $customer ? User::find($customer->id) : null;
-
-    if (!$customer) {
-        return back()->withErrors(['message' => 'Customer not found for the given ticket.']);
+        // Load the related models
+        $ticket->load('purchase.customer.user', 'screening.movie', 'screening.theater', 'seat');
+    
+        // Get the user
+        $user = $ticket->purchase->customer->user;
+    
+        // Return the view with the ticket and user data
+        return view('tickets.show', compact('ticket', 'user'));
     }
+    
 
-    $pdf = PDF::loadView('tickets.pdf', compact('ticket', 'movie', 'purchase', 'theater', 'screening', 'seat', 'customer', 'user'));
-    return $pdf->download('tickets.pdf');
-}
-
+    public function downloadTicketPDF(Ticket $ticket)
+    {
+        $ticket->load('purchase.customer.user', 'screening.movie', 'screening.theater', 'seat');
+    
+        $user = $ticket->purchase->customer->user;
+        
+        $pdf = PDF::loadView('tickets.pdf', [
+            'user' => $user,
+            'ticket' => $ticket,
+            'movie' => $ticket->screening->movie,
+            'theater' => $ticket->screening->theater,
+            'purchase' => $ticket->purchase,
+            'screening' => $ticket->screening,
+            'seat' => $ticket->seat
+        ]);
+    
+        return $pdf->download('ticket_' . $ticket->id . '.pdf');
+    }
+    
 
     public function edit(Ticket $ticket)
     {
@@ -123,45 +121,50 @@ class TicketController extends Controller
             ->with('alert-type', 'success');
     }
 
-
-    public function show(Request $request, Ticket $ticket)
+    public function showCart(Request $request)
     {
-        $purchases = Purchase::pluck('nome', 'code');
-        $purchase = $request->query('purchase');
-
-        $ticket = Ticket::find($ticket->id);
-        $screenings = $ticket->status()->paginate(6);
-
-
-        return view('bilhetes.show', compact('purchases', 'purchase', 'ticket','screenings'));
+        $carrinho = $request->session()->get('carrinho', []);
+        $customer = Customer::find(Auth::user()->id);
+    
+        return view('cart', compact('carrinho', 'customer'));
     }
 
     public function create(Request $request) {
-
         $configuration = Configuration::first();
         $carrinho = $request->session()->get('carrinho', []);
         $customer = Customer::find(Auth::user()->id);
-
-        //dd($customer->user);
-
+    
+        // Validate the inputs
+        $validatedData = $request->validate([
+            'payment_type' => 'required|string',
+            'nif' => 'nullable|digits:9',
+            'payment_ref' => 'nullable|digits:16',
+        ]);
+    
+        // Update customer with the latest inputs
+        $customer->update([
+            'payment_type' => $validatedData['payment_type'],
+            'nif' => $validatedData['nif'] ?? $customer->nif,
+            'payment_ref' => $validatedData['payment_ref'] ?? $customer->payment_ref,
+        ]);
+    
+        // Create the purchase
         $purchase = Purchase::create([
             'customer_id' => $customer->id,
             'date' => date('Y-m-d'),
             'customer_email' => $customer->user->email,
             'discount' => $configuration->registered_customer_ticket_discount,
             'total_price' => ($configuration->ticket_price - $configuration->registered_customer_ticket_discount) * count($carrinho),
-            'nif' => $customer->nif,
-            'payment_type' => $customer->payment_type,
-            'payment_ref' => $customer->payment_ref,
+            'nif' => $validatedData['nif'], // Use input NIF
+            'payment_type' => $validatedData['payment_type'], // Use selected payment type
+            'payment_ref' => $validatedData['payment_ref'], // Use input payment reference
             'screening_id' => $request->screening_id,
             'seat_id' => $request->seat_id,
             'customer_name' => Auth::user()->name
         ]);
-
-        $purchase->save();
-
-
-        foreach($carrinho as $row) {
+    
+        // Create the tickets
+        foreach ($carrinho as $row) {
             $ticket = Ticket::create([
                 'customer_id' => $customer->id,
                 'screening_id' => $row['screening'],
@@ -170,15 +173,22 @@ class TicketController extends Controller
                 'purchase_id' => $purchase->id,
                 'status' => 'valid'
             ]);
-
-            $ticket->save();
+    
+            // Generate QR code URL
+            $qrCodeUrl = route('tickets.show', $ticket->id) . '?token=' . bin2hex(random_bytes(16));
+    
+            // Save the QR code URL
+            $ticket->update(['qrcode_url' => $qrCodeUrl]);
         }
-
+    
+        // Clear the cart session
         $request->session()->forget('carrinho');
+    
         return back()
             ->with('alert-msg', 'Bilhetes comprados com sucesso!')
             ->with('alert-type', 'danger');
     }
+    
 
-
+    
 }

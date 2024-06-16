@@ -17,6 +17,7 @@ class MovieController extends Controller
     {
         $filterByGenre = $request->input('genre');
         $filterByTitle = $request->input('title');
+        $filterBySynopsis = $request->input('synopsis');
 
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeeks(2);
@@ -34,6 +35,10 @@ class MovieController extends Controller
             $query->where('title', 'like', '%' . $filterByTitle . '%');
         }
 
+        if ($filterBySynopsis) {
+            $query->where('synopsis', 'like', '%' . $filterBySynopsis . '%');
+        }
+
         if (auth()->user() && auth()->user()->type === 'A') {
             $query->withTrashed();
         }
@@ -41,7 +46,7 @@ class MovieController extends Controller
         $movies = $query->paginate(10);
         $genres = Genre::all();
 
-        return view('movies.index', compact('movies', 'genres', 'filterByGenre', 'filterByTitle'));
+        return view('movies.index', compact('movies', 'genres', 'filterByGenre', 'filterByTitle', 'filterBySynopsis'));
     }
 
     public function create()
@@ -74,24 +79,30 @@ class MovieController extends Controller
         return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
     }
 
-    public function show(Request $request,Movie $movie)
+    public function show(Request $request, Movie $movie)
     {
         $generos = Genre::pluck('name', 'code');
         $genero = $request->query('genre');
         $movie = Movie::find($movie->id);
-
-
-        $data = date('Y-m-d',strtotime('-5 minutes'));
-        $hora = date('H:i:s',strtotime('-5 minutes'));
-
-        $screening_id= Screening::where('movie_id', $movie->id)->where('date', '>=', $data) ->pluck('id');
-
-        $screenings = Screening::whereIn('id', $screening_id);
-
-        $screenings = $screenings->paginate(6)->withQueryString();
-
-        return view('movies.show', compact('movie','screenings'));
+    
+        $data = date('Y-m-d', strtotime('-5 minutes'));
+        $hora = date('H:i:s', strtotime('-5 minutes'));
+    
+        $screenings = Screening::where('movie_id', $movie->id)
+            ->where('date', '>=', $data)
+            ->with(['theater', 'tickets'])
+            ->paginate(6);
+    
+        // Calculate availability
+        foreach ($screenings as $screening) {
+            $availableSeats = $screening->theater->seats->count() - $screening->tickets->count();
+            $screening->isSoldOut = $availableSeats <= 0;
+        }
+    
+        return view('movies.show', compact('movie', 'screenings'));
     }
+    
+    
 
     public function edit(Movie $movie)
     {
