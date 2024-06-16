@@ -79,24 +79,30 @@ class MovieController extends Controller
         return redirect()->route('movies.index')->with('success', 'Movie added successfully.');
     }
 
-    public function show(Request $request,Movie $movie)
+    public function show(Request $request, Movie $movie)
     {
         $generos = Genre::pluck('name', 'code');
         $genero = $request->query('genre');
         $movie = Movie::find($movie->id);
-
-
-        $data = date('Y-m-d',strtotime('-5 minutes'));
-        $hora = date('H:i:s',strtotime('-5 minutes'));
-
-        $screening_id= Screening::where('movie_id', $movie->id)->where('date', '>=', $data) ->pluck('id');
-
-        $screenings = Screening::whereIn('id', $screening_id);
-
-        $screenings = $screenings->paginate(6)->withQueryString();
-
-        return view('movies.show', compact('movie','screenings'));
+    
+        $data = date('Y-m-d', strtotime('-5 minutes'));
+        $hora = date('H:i:s', strtotime('-5 minutes'));
+    
+        $screenings = Screening::where('movie_id', $movie->id)
+            ->where('date', '>=', $data)
+            ->with(['theater', 'tickets'])
+            ->paginate(6);
+    
+        // Calculate availability
+        foreach ($screenings as $screening) {
+            $availableSeats = $screening->theater->seats->count() - $screening->tickets->count();
+            $screening->isSoldOut = $availableSeats <= 0;
+        }
+    
+        return view('movies.show', compact('movie', 'screenings'));
     }
+    
+    
 
     public function edit(Movie $movie)
     {
