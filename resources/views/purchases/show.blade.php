@@ -11,19 +11,19 @@
             @if($purchases->isNotEmpty())
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Data
+                                Date
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Tipo Pagamento
+                                Payment Type
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Preço
+                                Price
                             </th>
                             <th scope="col" class="text-center">
-
+                                Actions
                             </th>
                         </tr>
                     </thead>

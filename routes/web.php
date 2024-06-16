@@ -88,7 +88,9 @@ Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira
 Route::get('purchases/{user}', [PurchaseController::class, 'show'])->name('purchases.show');
 Route::get('purchases/tickets/{purchase}', [PurchaseController::class, 'show_ticket'])->name('purchases.show_ticket');
 
-Route::get('tickets/{ticket}',[TicketController::class,'downloadBilhetePDF'])->name('ticket.downloadBilhetePDF');
+// Ticket Routes
+Route::get('tickets/{ticket}/download', [TicketController::class, 'downloadTicketPDF'])->name('tickets.downloadTicketPDF');
+Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
 
 
 // ADMIN PERMISSIONS

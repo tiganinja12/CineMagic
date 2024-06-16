@@ -15,6 +15,8 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class TicketController extends Controller
 {
@@ -65,43 +67,33 @@ class TicketController extends Controller
 
     }
 
-    /*public function downloadBilhetePDF(Ticket $ticket)
+
+    public function show(Ticket $ticket)
     {
-        $screening=Screening::find($ticket->screening_id);
-        $movie=Movie::find($screening->movie_id);
-        $purchase=Purchase::find($ticket->purchase_id);
-        $theater=Theater::find($screening->theater_id);
-        $seat=Seat::find($ticket->seat_id);
-        dd($customer);
-        $user=User::find($customer->id);
+        $ticket->load('customer.user', 'screening.movie', 'screening.theater', 'seat');
 
-        $pdf = PDF::loadView('tickets\pdf',compact('ticket','movie','purchase','theater','screening','seat','customer','user'));
-        return $pdf->download('tickets.pdf');
-
-    }*/
-
-    public function downloadBilhetePDF(Ticket $ticket)
-{
-    // Carregar as relações necessárias
-    $ticket->load('screening.movie', 'screening.theater', 'seat', 'purchase.customer');
-
-    // Acessar as relações carregadas
-    $screening = $ticket->screening;
-    $movie = $screening->movie;
-    $theater = $screening->theater;
-    $purchase = $ticket->purchase;
-    $seat = $ticket->seat;
-    $customer = $purchase->customer;
-    $user = $customer ? User::find($customer->id) : null;
-
-    if (!$customer) {
-        return back()->withErrors(['message' => 'Customer not found for the given ticket.']);
+        return view('tickets.show', compact('ticket'));
     }
 
-    $pdf = PDF::loadView('tickets.pdf', compact('ticket', 'movie', 'purchase', 'theater', 'screening', 'seat', 'customer', 'user'));
-    return $pdf->download('tickets.pdf');
-}
-
+    public function downloadTicketPDF(Ticket $ticket)
+    {
+        $ticket->load('customer.user', 'screening.movie', 'screening.theater', 'seat');
+    
+        $user = $ticket->customer ? $ticket->customer->user : null;
+    
+        $pdf = PDF::loadView('tickets.pdf', [
+            'user' => $user,
+            'ticket' => $ticket,
+            'movie' => $ticket->screening->movie,
+            'theater' => $ticket->screening->theater,
+            'purchase' => $ticket->purchase,
+            'screening' => $ticket->screening,
+            'seat' => $ticket->seat
+        ]);
+    
+        return $pdf->download('ticket_' . $ticket->id . '.pdf');
+    }
+    
 
     public function edit(Ticket $ticket)
     {
@@ -123,19 +115,6 @@ class TicketController extends Controller
             ->with('alert-type', 'success');
     }
 
-
-    public function show(Request $request, Ticket $ticket)
-    {
-        $purchases = Purchase::pluck('nome', 'code');
-        $purchase = $request->query('purchase');
-
-        $ticket = Ticket::find($ticket->id);
-        $screenings = $ticket->status()->paginate(6);
-
-
-        return view('bilhetes.show', compact('purchases', 'purchase', 'ticket','screenings'));
-    }
-
     public function showCart(Request $request)
     {
         $carrinho = $request->session()->get('carrinho', []);
@@ -143,7 +122,7 @@ class TicketController extends Controller
     
         return view('cart', compact('carrinho', 'customer'));
     }
-    
+
     public function create(Request $request) {
         $configuration = Configuration::first();
         $carrinho = $request->session()->get('carrinho', []);
@@ -180,7 +159,7 @@ class TicketController extends Controller
     
         // Create the tickets
         foreach ($carrinho as $row) {
-            Ticket::create([
+            $ticket = Ticket::create([
                 'customer_id' => $customer->id,
                 'screening_id' => $row['screening'],
                 'seat_id' => $row['seat_id'],
@@ -188,6 +167,14 @@ class TicketController extends Controller
                 'purchase_id' => $purchase->id,
                 'status' => 'valid'
             ]);
+    
+            // Generate QR code
+            $qrCode = QrCode::format('png')->size(200)->generate(route('tickets.show', $ticket->id));
+            $qrCodePath = 'qrcodes/ticket_' . $ticket->id . '.png';
+            Storage::disk('public')->put($qrCodePath, $qrCode);
+    
+            // Save the QR code URL
+            $ticket->update(['qrcode_url' => $qrCodePath]);
         }
     
         // Clear the cart session
@@ -197,6 +184,7 @@ class TicketController extends Controller
             ->with('alert-msg', 'Bilhetes comprados com sucesso!')
             ->with('alert-type', 'danger');
     }
+    
 
     
 }
