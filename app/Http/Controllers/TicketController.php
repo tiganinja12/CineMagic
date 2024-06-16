@@ -141,9 +141,7 @@ class TicketController extends Controller
         $configuration = Configuration::first();
         $carrinho = $request->session()->get('carrinho', []);
         $customer = Customer::find(Auth::user()->id);
-
-        //dd($customer->user);
-
+    
         $purchase = Purchase::create([
             'customer_id' => $customer->id,
             'date' => date('Y-m-d'),
@@ -151,16 +149,15 @@ class TicketController extends Controller
             'discount' => $configuration->registered_customer_ticket_discount,
             'total_price' => ($configuration->ticket_price - $configuration->registered_customer_ticket_discount) * count($carrinho),
             'nif' => $customer->nif,
-            'payment_type' => $customer->payment_type,
+            'payment_type' => $request->input('payment_type'), // Use selected payment type
             'payment_ref' => $customer->payment_ref,
             'screening_id' => $request->screening_id,
             'seat_id' => $request->seat_id,
             'customer_name' => Auth::user()->name
         ]);
-
+    
         $purchase->save();
-
-
+    
         foreach($carrinho as $row) {
             $ticket = Ticket::create([
                 'customer_id' => $customer->id,
@@ -170,15 +167,15 @@ class TicketController extends Controller
                 'purchase_id' => $purchase->id,
                 'status' => 'valid'
             ]);
-
+    
             $ticket->save();
         }
-
+    
         $request->session()->forget('carrinho');
         return back()
             ->with('alert-msg', 'Bilhetes comprados com sucesso!')
             ->with('alert-type', 'danger');
     }
-
+    
 
 }
