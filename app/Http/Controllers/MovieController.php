@@ -17,6 +17,7 @@ class MovieController extends Controller
     {
         $filterByGenre = $request->input('genre');
         $filterByTitle = $request->input('title');
+        $filterBySynopsis = $request->input('synopsis');
 
         $startDate = Carbon::today();
         $endDate = Carbon::today()->addWeeks(2);
@@ -34,6 +35,10 @@ class MovieController extends Controller
             $query->where('title', 'like', '%' . $filterByTitle . '%');
         }
 
+        if ($filterBySynopsis) {
+            $query->where('synopsis', 'like', '%' . $filterBySynopsis . '%');
+        }
+
         if (auth()->user() && auth()->user()->type === 'A') {
             $query->withTrashed();
         }
@@ -41,7 +46,7 @@ class MovieController extends Controller
         $movies = $query->paginate(10);
         $genres = Genre::all();
 
-        return view('movies.index', compact('movies', 'genres', 'filterByGenre', 'filterByTitle'));
+        return view('movies.index', compact('movies', 'genres', 'filterByGenre', 'filterByTitle', 'filterBySynopsis'));
     }
 
     public function create()
