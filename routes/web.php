@@ -83,6 +83,8 @@ Route::get('statistics/sales-by-customer', [StatisticsController::class, 'salesB
 Route::get('/statistics/ticketSalesByYear', [StatisticsController::class, 'ticketSalesByYear'])->name('statistics.ticketSalesByYear');
 
 
+Route::get('tickets/check', [TicketController::class, 'checkTicket'])->name('tickets.check');
+
 Route::post('bilheteira', [TicketController::class, 'create'])->name('bilheteira.create');
 
 Route::get('purchases/{user}', [PurchaseController::class, 'show'])->name('purchases.show');
