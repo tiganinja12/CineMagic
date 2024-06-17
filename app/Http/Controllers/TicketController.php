@@ -138,6 +138,25 @@ class TicketController extends Controller
         return view('cart', compact('carrinho', 'customer'));
     }
 
+    public function downloadAllTicketsPDF()
+    {
+        // Obtenha o usuário autenticado
+        $user = Auth::user();
+
+        // Obtenha todas as compras do usuário
+        $purchases = Purchase::where('customer_id', $user->id)->get();
+
+        // Carregue todos os tickets associados a cada compra
+        foreach ($purchases as $purchase) {
+            $purchase->tickets = Ticket::where('purchase_id', $purchase->id)->get();
+        }
+
+        // Gere o PDF
+        $pdf = PDF::loadView('tickets.all_tickets_pdf', compact('purchases', 'user'));
+
+        return $pdf->download('tickets_' . $user->id . '.pdf');
+    }
+
     public function create(Request $request)
     {
         $configuration = Configuration::first();
