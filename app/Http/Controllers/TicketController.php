@@ -99,6 +99,20 @@ class TicketController extends Controller
     
         return $pdf->download('ticket_' . $ticket->id . '.pdf');
     }
+
+    public function downloadAllTicketsPDF(Purchase $purchase)
+    {
+        $purchase->load('tickets.screening.movie', 'tickets.screening.theater', 'tickets.seat', 'customer.user');
+
+        $pdf = PDF::loadView('tickets.pdf_all', [
+            'purchase' => $purchase,
+            'tickets' => $purchase->tickets,
+            'customer' => $purchase->customer,
+            'user' => $purchase->customer->user
+        ]);
+    
+        return $pdf->download('all_tickets_' . $purchase->id . '.pdf');
+    }
     
 
     public function edit(Ticket $ticket)

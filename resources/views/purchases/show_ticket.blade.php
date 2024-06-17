@@ -8,6 +8,13 @@
     <div class="filme_sessoes border-b border-gray-400">
         <div class="container  mx-auto px-4 py-16">
             <br>
+            <div class="text-center">
+                <a href="{{ route('tickets.downloadAllTicketsPDF', $purchase) }}">
+                    <button type="button" class="text-white bg-gradient-to-br from-red-500 to-red-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-red-200 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 h-10">
+                        Download All Tickets PDF
+                    </button>
+                </a>
+            </div>
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-black uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

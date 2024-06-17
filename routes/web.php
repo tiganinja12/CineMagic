@@ -90,6 +90,7 @@ Route::get('purchases/tickets/{purchase}', [PurchaseController::class, 'show_tic
 
 // Ticket Routes
 Route::get('tickets/{ticket}/download', [TicketController::class, 'downloadTicketPDF'])->name('tickets.downloadTicketPDF');
+Route::get('purchases/{purchase}/downloadAllTicketsPDF', [TicketController::class, 'downloadAllTicketsPDF'])->name('tickets.downloadAllTicketsPDF');
 Route::get('tickets/{ticket}', [TicketController::class, 'show'])->name('tickets.show');
 
 
